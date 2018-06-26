@@ -16,7 +16,9 @@ buildscript {
     ext.mockitoVersion = '1.10.19'
 
     repositories {
-        mavenCentral()
+        maven{
+            url 'http://192.168.31.3:91/repository/maven-public/'
+        }
     }
 
     dependencies {
@@ -26,7 +28,7 @@ buildscript {
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.7.3"
+//    id "com.jfrog.bintray" version "1.7.3"
 }
 
 apply plugin: 'java'
@@ -52,7 +54,9 @@ allprojects {
     // apply plugin: 'checkstyle'
 
     repositories {
-        mavenCentral()
+        maven{
+            url 'http://192.168.31.3:91/repository/maven-public/'
+        }
     }
 
     // We don't want any compiler warnings
@@ -99,7 +103,7 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
 
     // Required for JFrog Artifactory repository
     apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
+//    apply plugin: 'com.jfrog.bintray'
 
     task javadocJar(type: Jar) {
         classifier = 'javadoc'
@@ -188,7 +192,7 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
         sign configurations.archives
     }
 
-    bintray {
+    /*bintray {
         user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
         key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
         publications = ['mavenJava']
@@ -204,7 +208,7 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
             websiteUrl = 'https://web3j.io'
             publicDownloadNumbers = true
         }
-    }
+    }*/
 
     task release {
         //TODO run clean & closeAndPromoteRepository once
@@ -212,8 +216,8 @@ configure(subprojects.findAll {it.name != 'integration-tests'}) {
         dependsOn 'uploadArchives'
         dependsOn 'bintrayUpload'
 
-        tasks.findByName('uploadArchives').mustRunAfter 'build'
-        tasks.findByName('bintrayUpload').mustRunAfter 'build'
+       // tasks.findByName('uploadArchives').mustRunAfter 'build'
+        //tasks.findByName('bintrayUpload').mustRunAfter 'build'
     }
 }
 
